@@ -1,9 +1,34 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
 function App() {
+
+  const [pendingTasks, setPendingTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
+  function getPendingTasksFromServer() {
+    console.log('hi');
+    fetch('http://localhost:8080/api/pendingTasks')
+        .then(response => response.json())
+        .then(data => setPendingTasks(data))
+        .catch(error => console.error(error));
+  }
+
+  function getCompletedTasksFromServer() {
+    console.log('hello');
+    fetch('http://localhost:8080/api/completedTasks')
+        .then(response => response.json())
+        .then(data => setCompletedTasks(data))
+        .catch(error => console.error(error));
+  }
+
+  useEffect(() => {
+    getPendingTasksFromServer();
+    getCompletedTasksFromServer();
+  }, []);
+
   return (
   <div className="container">
     <div className="row">
@@ -29,32 +54,24 @@ function App() {
       <div className="col">
         <h3>Pending</h3>
         <ul>
-          <li>
-            <input type="checkbox" name="myCheckbox" value="true"/>
-              Work work
-          </li>
-          <li>
-            <input type="checkbox" name="myCheckbox" value="true"/>
-              Work work
-          </li>
-          <li>
-            <input type="checkbox" name="myCheckbox" value="true"/>
-              Work work
-          </li>
+          {pendingTasks.map(task => (
+              <li key={task.id}>
+                <input type="checkbox" name="myCheckbox" value="true"/>
+                {task.description}
+              </li>
+          ))}
         </ul>
       </div>
 
       <div className="col">
         <h3>Completed</h3>
         <ul>
-          <li>
-            <input type="checkbox" name="myCheckbox" value="true" checked/>
-              Work work
-          </li>
-          <li>
-            <input type="checkbox" name="myCheckbox" value="true" checked/>
-              Work work
-          </li>
+          {completedTasks.map(task => (
+              <li key={task.id}>
+                <input type="checkbox" name="myCheckbox" value="true" checked/>
+                {task.description}
+              </li>
+          ))}
         </ul>
       </div>
     </div>
