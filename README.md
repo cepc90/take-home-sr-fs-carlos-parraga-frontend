@@ -3,6 +3,7 @@
 To run this application you have to execute the following command:
 
 ```
+npm install
 npm start
 ```
 
