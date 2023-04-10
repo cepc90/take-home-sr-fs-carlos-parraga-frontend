@@ -7,9 +7,46 @@ function App() {
 
   const [pendingTasks, setPendingTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+
+  const handleNewTaskDescriptionChange = (event) => {
+    setNewTaskDescription(event.target.value);
+  };
+
+  function submitNewTask(event){
+    event.preventDefault();
+    setNewTaskDescription("");
+    fetch("http://localhost:8080/api/task", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        description: newTaskDescription
+      })
+    })
+        .then(function () {
+          getAllTasksFromServer();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }
+
+  let updateTasksTimer = null;
+
+  function getAllTasksFromServer() {
+    if (updateTasksTimer != null) {
+      clearTimeout(updateTasksTimer);
+    }
+
+    getPendingTasksFromServer();
+    getCompletedTasksFromServer();
+
+    updateTasksTimer = setTimeout(getAllTasksFromServer, 5000); // Update tasks from server every 5 seconds
+  }
 
   function getPendingTasksFromServer() {
-    console.log('hi');
     fetch('http://localhost:8080/api/pendingTasks')
         .then(response => response.json())
         .then(data => setPendingTasks(data))
@@ -17,7 +54,6 @@ function App() {
   }
 
   function getCompletedTasksFromServer() {
-    console.log('hello');
     fetch('http://localhost:8080/api/completedTasks')
         .then(response => response.json())
         .then(data => setCompletedTasks(data))
@@ -25,8 +61,7 @@ function App() {
   }
 
   useEffect(() => {
-    getPendingTasksFromServer();
-    getCompletedTasksFromServer();
+    getAllTasksFromServer();
   }, []);
 
   return (
@@ -42,11 +77,17 @@ function App() {
 
     <div className="row mt-3">
       <div className="col">
-        <input type="text"/>
-        <input type="submit" value="Add"/>
+        <form onSubmit={submitNewTask}>
+          <div className="input-group">
+            <input className="form-control" type="text" placeholder="New task name" value={newTaskDescription} onChange={handleNewTaskDescriptionChange} />
+            <div className="input-group-append">
+              <input className="btn btn-info" type="submit" value="Add"/>
+            </div>
+          </div>
+        </form>
       </div>
       <div className="col">
-        <input type="text"/>
+        <input className="form-control" type="text" placeholder="Tasks filter"/>
       </div>
     </div>
 
