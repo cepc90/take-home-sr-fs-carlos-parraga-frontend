@@ -8,9 +8,14 @@ function App() {
   const [pendingTasks, setPendingTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [newTaskDescription, setNewTaskDescription] = useState("");
+  const [filterText, setFilterText] = useState("");
 
   const handleNewTaskDescriptionChange = (event) => {
     setNewTaskDescription(event.target.value);
+  };
+
+  const handleFilterTextChange = (event) => {
+    setFilterText(event.target.value);
   };
 
   function submitNewTask(event){
@@ -123,7 +128,7 @@ function App() {
   <div className="container">
     <div className="row">
       <div className="col">
-        <h1>Hello, world!</h1>
+        <h1>Awesome list v1.0.0</h1>
       </div>
       <div className="col">
         <div style={{width: '100%', textAlign: "right", cursor: "pointer"}}>
@@ -146,7 +151,7 @@ function App() {
         </form>
       </div>
       <div className="col">
-        <input className="form-control" type="text" placeholder="Tasks filter"/>
+        <input className="form-control" type="text" placeholder="Tasks filter" value={filterText} onChange={handleFilterTextChange} />
       </div>
     </div>
 
@@ -154,28 +159,32 @@ function App() {
       <div className="col">
         <h3>Pending</h3>
         <ul style={{listStyle: 'none', paddingLeft: '0px'}}>
-          {pendingTasks.map(task => (
-              <li key={task.id}>
-                <label style={{cursor: "pointer"}} onClick={(e) => markTaskAsCompleted(e, task.id)}>
-                  <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true"/>
-                  {task.description}
-                </label>
-              </li>
-          ))}
+          {pendingTasks
+              .filter(task => task.description.toLowerCase().includes(filterText.toLowerCase()))
+              .map(task => (
+                  <li key={task.id}>
+                    <label style={{cursor: "pointer"}} onClick={(e) => markTaskAsCompleted(e, task.id)}>
+                      <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true"/>
+                      {task.description}
+                    </label>
+                  </li>
+              ))}
         </ul>
       </div>
 
       <div className="col">
         <h3>Completed</h3>
         <ul style={{listStyle: 'none', paddingLeft: '0px'}}>
-          {completedTasks.map(task => (
-              <li key={task.id}>
-                <label style={{cursor: "pointer"}} onClick={(e) => markTaskAsPending(e, task.id)}>
-                  <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true" checked/>
-                  {task.description}
-                </label>
-              </li>
-          ))}
+          {completedTasks
+              .filter(task => task.description.toLowerCase().includes(filterText.toLowerCase()))
+              .map(task => (
+                  <li key={task.id}>
+                    <label style={{cursor: "pointer"}} onClick={(e) => markTaskAsPending(e, task.id)}>
+                      <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true" checked/>
+                      {task.description}
+                    </label>
+                  </li>
+              ))}
         </ul>
       </div>
     </div>
