@@ -15,4 +15,4 @@ The backend can be found at: https://github.com/cepc90/TakeHomeSrFsCarlosParraga
 
 #### Versions
 
-The node version that I used v18.15.0 and the npm version 9.6.4.
+I used node v18.15.0 and npm v9.6.4.
