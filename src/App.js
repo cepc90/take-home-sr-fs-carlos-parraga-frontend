@@ -100,6 +100,20 @@ function App() {
         .catch(error => console.error(error));
   }
 
+  function confirmDeleteAllTasks() {
+    const result = window.confirm('Are you sure you want to delete all tasks?');
+    if (result) {
+      deleteAllTasks();
+    }
+  }
+
+  function deleteAllTasks() {
+    fetch('http://localhost:8080/api/deleteAllTasks')
+        .then(response => response.json())
+        .then(data => setCompletedTasks(data))
+        .catch(error => console.error(error));
+  }
+
   useEffect(() => {
     getAllTasksFromServer();
   }, []);
@@ -110,8 +124,12 @@ function App() {
       <div className="col">
         <h1>Hello, world!</h1>
       </div>
-      <div className="col text-right">
-        Delete all tasks
+      <div className="col">
+        <div style={{width: '100%', textAlign: "right", cursor: "pointer"}}>
+          <span className="blue-hover" onClick={confirmDeleteAllTasks}>
+            Delete all tasks
+          </span>
+        </div>
       </div>
     </div>
 
