@@ -108,10 +108,11 @@ function App() {
   }
 
   function deleteAllTasks() {
-    fetch('http://localhost:8080/api/deleteAllTasks')
-        .then(response => response.json())
-        .then(data => setCompletedTasks(data))
-        .catch(error => console.error(error));
+    fetch("http://localhost:8080/api/deleteAllTasks")
+        .then(response => getAllTasksFromServer())
+        .catch((error) => {
+          console.error(error);
+        });
   }
 
   useEffect(() => {
