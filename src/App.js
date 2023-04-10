@@ -33,6 +33,46 @@ function App() {
         });
   }
 
+  function markTaskAsCompleted(event, id){
+    event.preventDefault();
+    setNewTaskDescription("");
+    fetch("http://localhost:8080/api/task/markAsCompleted", {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+        .then(function () {
+          getAllTasksFromServer();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }
+
+  function markTaskAsPending(event, id){
+    event.preventDefault();
+    setNewTaskDescription("");
+    fetch("http://localhost:8080/api/task/markAsPending", {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+        .then(function () {
+          getAllTasksFromServer();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }
+
   let updateTasksTimer = null;
 
   function getAllTasksFromServer() {
@@ -97,7 +137,7 @@ function App() {
         <ul style={{listStyle: 'none', paddingLeft: '0px'}}>
           {pendingTasks.map(task => (
               <li key={task.id}>
-                <label style={{cursor: "pointer"}}>
+                <label style={{cursor: "pointer"}} onClick={(e) => markTaskAsCompleted(e, task.id)}>
                   <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true"/>
                   {task.description}
                 </label>
@@ -111,7 +151,7 @@ function App() {
         <ul style={{listStyle: 'none', paddingLeft: '0px'}}>
           {completedTasks.map(task => (
               <li key={task.id}>
-                <label style={{cursor: "pointer"}}>
+                <label style={{cursor: "pointer"}} onClick={(e) => markTaskAsPending(e, task.id)}>
                   <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true" checked/>
                   {task.description}
                 </label>
