@@ -94,11 +94,13 @@ function App() {
     <div className="row mt-3">
       <div className="col">
         <h3>Pending</h3>
-        <ul>
+        <ul style={{listStyle: 'none', paddingLeft: '0px'}}>
           {pendingTasks.map(task => (
               <li key={task.id}>
-                <input type="checkbox" name="myCheckbox" value="true"/>
-                {task.description}
+                <label style={{cursor: "pointer"}}>
+                  <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true"/>
+                  {task.description}
+                </label>
               </li>
           ))}
         </ul>
@@ -106,11 +108,13 @@ function App() {
 
       <div className="col">
         <h3>Completed</h3>
-        <ul>
+        <ul style={{listStyle: 'none', paddingLeft: '0px'}}>
           {completedTasks.map(task => (
               <li key={task.id}>
-                <input type="checkbox" name="myCheckbox" value="true" checked/>
-                {task.description}
+                <label style={{cursor: "pointer"}}>
+                  <input className={"mx-2"} type="checkbox" name="myCheckbox" value="true" checked/>
+                  {task.description}
+                </label>
               </li>
           ))}
         </ul>
